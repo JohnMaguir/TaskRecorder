@@ -38,6 +38,15 @@ At the end of the week you can run:
 ruby task-recorder.rb notes
 ```
 It will compile list of all tasks under the Yesterday header and compile them into a list of completed tasks for the week.
+An example will look like
+```
+*This Week*
+>Task 1 Nake big update
+>Meeting on new project
+>Task 2
+>Task 3
+*Next Week*
+```
 
 At the strat of each day you can run
 ```
@@ -58,6 +67,6 @@ example bashrc entry
 alias tr='ruby /path/to/repo/TaskRecorder/task-recorder.rb'
 ```
 Then you can simply run
-````
+```
 tr {command}
 ```
