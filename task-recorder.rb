@@ -5,7 +5,7 @@ def add_new_item(note, done_item=true)
   file_data = File.read("#{@root_dir}#{@todays_file}")
   lines = file_data.split("\n")
   position = -1
-  position = lines.index(@delim) if done_item
+  position = lines.index("*Today*") if done_item
   lines.insert(position, ">#{note}")
 
   write_today(lines.join("\n"))
@@ -28,8 +28,7 @@ def notes_for_week
     filename = "#{day.strftime('%F')}-tasks"
     next unless File.exists?("#{@root_dir}#{filename}")
     file_data = File.read("#{@root_dir}#{filename}")
-    delim = day.friday? ? "*Friday*" : "*Today*"
-    tasks = file_data.split(delim)[0].split("\n")
+    tasks = file_data.split("*Today*")[0].split("\n")
     # get rid of header
     tasks.shift
     completed_tasks.concat(tasks)
@@ -76,8 +75,8 @@ today = Date.today
 Dir.mkdir @root_dir unless File.exists?("#{@root_dir}")
 @todays_file = "#{today.strftime('%F')}-tasks"
 @weeks_file = "week-#{today.cweek}-#{today.year}-notes"
-@delim = today.friday? ? "*Friday*" : "*Today*"
-daily_template = "*Yesterday*\n#{@delim}\n"
+heading = today.friday? ? "*Friday*" : "*Yesterday*"
+daily_template = "#{heading}\n*Today*\n"
 write_today(daily_template) unless File.exists?("#{@root_dir}#{@todays_file}")
 
 case command
