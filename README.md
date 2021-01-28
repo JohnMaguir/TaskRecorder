@@ -70,3 +70,24 @@ Then you can simply run
 ```
 tr {command}
 ```
+
+The way I am hoping to use this is throughout the day after I complete each task I will run
+```
+tr done "Description of task completed"
+```
+Then at the end of the day I will run
+```
+tr todo "Description of task to do for tomorrow"
+```
+for each task I have scheduled for tomorrow
+Then each morning I will run
+```
+tr standup
+```
+and copy and paste that directly to slack dev-standup channel
+Then each Thursday evening I will run
+```
+tr notes
+```
+add my todods for next week.
+These will be my notes for weekly project manager meeting
