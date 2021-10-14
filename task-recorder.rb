@@ -37,6 +37,10 @@ def notes_for_week
   File.write("#{@root_dir}#{@weeks_file}", "*This Week*\n#{output}\n*Next Week*")
 end
 
+def edit_todays_notes
+  system('vim', "#{@root_dir}#{@todays_file}")
+end
+
 def clean
   today = Date.today
   friday = prior_friday(today)
@@ -53,13 +57,14 @@ def prior_friday(date)
   date.to_date - days_before
 end
 
-commands = %i{done todo notes standup today clean help}
+commands = %i{done todo notes standup today edit clean help}
 help_notes = {
   done: "Add task to done for today",
   todo: "Add task to todo for tomorrow",
   notes: "Compile notes of completed tasks for the week incl. prior Friday as weekly meeting is Friday morning",
   standup: "Output notes to be pasted in dev-standup this morning",
   today: "Output notes for today",
+  edit: "Open todays notes in Vim for editing",
   clean: "Remove files from all weeks but this one and prior Friday",
   help: "Display help notes for commands"
 }
@@ -96,6 +101,8 @@ when :standup
   output_file_content(standup_file)
 when :today
   output_file_content
+when :edit
+  edit_todays_notes
 when :clean
   clean
 when :help
