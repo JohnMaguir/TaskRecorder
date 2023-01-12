@@ -25,7 +25,7 @@ def notes_for_week
   friday = prior_friday(today)
   completed_tasks = []
   today.downto(friday) do |day|
-    filename = "#{day.strftime('%F')}-tasks"
+    filename = "#{day.strftime('%F')}-tasks.md"
     next unless File.exists?("#{@root_dir}#{filename}")
     file_data = File.read("#{@root_dir}#{filename}")
     tasks = file_data.split("*Today*")[0].split("\n")
@@ -44,7 +44,7 @@ end
 def clean
   today = Date.today
   friday = prior_friday(today)
-  save = today.downto(friday).map{|day| "#{day.strftime('%F')}-tasks"}
+  save = today.downto(friday).map{|day| "#{day.strftime('%F')}-tasks.md"}
   save << @weeks_file
   Dir.foreach(@root_dir) do |filename|
     next if filename == '.' or filename == '..' or (save.include? filename)
@@ -76,10 +76,10 @@ note = ARGV[1]&.to_s
 raise "Note required for #{command}" if note.nil? && (requires_note.include? command)
 
 today = Date.today
-@root_dir = "#{__dir__}/task_files/"
+@root_dir = "/home/onepagecrm/Documents/onepage_notes/onepage_notes/daily_standups/#{today.year}/" #"#{__dir__}/task_files/"
 Dir.mkdir @root_dir unless File.exists?("#{@root_dir}")
-@todays_file = "#{today.strftime('%F')}-tasks"
-@weeks_file = "week-#{today.cweek}-#{today.year}-notes"
+@todays_file = "#{today.strftime('%F')}-tasks.md"
+@weeks_file = "week-#{today.cweek}-#{today.year}-notes.md"
 heading = today.friday? ? "*Friday*" : "*Yesterday*"
 daily_template = "#{heading}\n*Today*\n"
 write_today(daily_template) unless File.exists?("#{@root_dir}#{@todays_file}")
@@ -97,7 +97,7 @@ when :notes
   output_file_content(@weeks_file)
 when :standup
   day = today.monday? ? prior_friday(today) : today.prev_day
-  standup_file = "#{day.strftime('%F')}-tasks"
+  standup_file = "#{day.strftime('%F')}-tasks.md"
   output_file_content(standup_file)
 when :today
   output_file_content
