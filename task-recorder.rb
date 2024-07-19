@@ -26,7 +26,7 @@ def notes_for_week
   completed_tasks = []
   today.downto(friday) do |day|
     filename = "#{day.strftime('%F')}-tasks.md"
-    next unless File.exists?("#{@root_dir}#{filename}")
+    next unless File.exist?("#{@root_dir}#{filename}")
     file_data = File.read("#{@root_dir}#{filename}")
     tasks = file_data.split("*Today*")[0].split("\n")
     # get rid of header
@@ -57,6 +57,35 @@ def prior_friday(date)
   date.to_date - days_before
 end
 
+# send row data to google sheet
+def send_to_google_sheet
+
+end
+
+# send row data to google sheet
+# use sheet id from google sheet url
+# use API key from google cloud platform
+def send_to_google_sheet
+  require 'google/apis/sheets_v4'
+  require 'googleauth'
+  require 'googleauth/stores/file_token_store'
+  require 'fileutils'
+
+  # Initialize the API
+  service = Google::Apis::SheetsV4::SheetsService.new
+  service.client_options.application_name = APPLICATION_NAME
+  service.authorization = authorize
+
+  # Prints the names and majors of students in a sample spreadsheet:
+  # https://docs.google.com/spreadsheets/d/1pDp7xSg4mZ4f9Z9X4Z4K4Qz4Ww8wJv1Q0n3q3a3a3/edit
+  spreadsheet_id = '1pDp7xSg4mZ4f9Z9X4Z4K4Qz4Ww8wJv1Q0n3q3a3a3'
+  range = 'A1:C1'
+  value_range_object = Google::Apis::SheetsV4::ValueRange.new
+  value_range_object.range = range
+  value_range_object.values = [["Name", "Major", "GPA"]]
+  service.append_spreadsheet_value(spreadsheet_id, range, value_range_object, value_input_option: 'RAW')
+end
+
 commands = %i{done todo notes standup today edit clean help}
 help_notes = {
   done: "Add task to done for today",
@@ -77,12 +106,12 @@ raise "Note required for #{command}" if note.nil? && (requires_note.include? com
 
 today = Date.today
 @root_dir = "/home/onepagecrm/Documents/onepage_notes/onepage_notes/daily_standups/#{today.year}/" #"#{__dir__}/task_files/"
-Dir.mkdir @root_dir unless File.exists?("#{@root_dir}")
+Dir.mkdir @root_dir unless File.exist?("#{@root_dir}")
 @todays_file = "#{today.strftime('%F')}-tasks.md"
 @weeks_file = "week-#{today.cweek}-#{today.year}-notes.md"
 heading = today.friday? ? "*Friday*" : "*Yesterday*"
 daily_template = "#{heading}\n*Today*\n"
-write_today(daily_template) unless File.exists?("#{@root_dir}#{@todays_file}")
+write_today(daily_template) unless File.exist?("#{@root_dir}#{@todays_file}")
 
 case command
 when :done
