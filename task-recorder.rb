@@ -105,7 +105,7 @@ note = ARGV[1]&.to_s
 raise "Note required for #{command}" if note.nil? && (requires_note.include? command)
 
 today = Date.today
-@root_dir = "/home/onepagecrm/Documents/onepage_notes/onepage_notes/daily_standups/#{today.year}/" #"#{__dir__}/task_files/"
+@root_dir = "/home/onepage/Documents/onepage_notes/onepage_notes/daily_standups/#{today.year}/" #"#{__dir__}/task_files/"
 Dir.mkdir @root_dir unless File.exist?("#{@root_dir}")
 @todays_file = "#{today.strftime('%F')}-tasks.md"
 @weeks_file = "week-#{today.cweek}-#{today.year}-notes.md"
